@@ -19,4 +19,24 @@ test('Selecionar origem e destino', async ({page}) => {
     await expect(page).toHaveURL(/.*reserve/)
     await expect(page.locator("div.container:nth-child(2) > h3:nth-child(1)")).toHaveText("Flights from Boston to New York:")
 
+    await page.locator('body > div.container > table > tbody > tr:nth-child(1) > td:nth-child(2) > input').click()
+
+    //checar se está na proxima pagina
+    await expect(page).toHaveURL(/.*purchase/)
+    await expect(page.locator('h2')).toHaveText('Your flight from TLV to SFO has been reserved.')
+
+    //preenchendo campos
+    await page.fill('#inputName', 'Ronaldo')
+    await page.fill('#address', 'Rua ABC, 123')
+    await page.fill('#city', 'Rio de Janeiro')
+    await page.fill('#state', 'Rio de Janeiro')
+    await page.fill('#zipCode', '12345')
+    await page.fill('#creditCardNumber', '1234567891023')
+    await page.fill('#nameOnCard', 'Ronaldo B Silveira')
+
+    await page.locator('body > div.container > form > div:nth-child(12) > div > input').click()
+
+    //checar confirmação
+    await expect(page).toHaveURL(/.*confirmation/)
+    await expect(page.locator('h1')).toHaveText('Thank you for your purchase today!')
 }) // final do teste
